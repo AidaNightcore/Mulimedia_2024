@@ -1,0 +1,27 @@
+body {
+  background-color: #29272b;
+  color: #f1e6fd;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6rem;
+}
+
+input {
+  font-size: 1rem;
+}
+
+button {
+  border: none;
+  border-radius: 0.2rem;
+  padding: 1rem 2rem;
+  color: #f1e6fd;
+  background-color: #7965af;
+}
+
+button:hover {
+  background-color: #5b3894;
+  transition: 0.1s ease-in-out;
+  cursor: pointer;
+}
