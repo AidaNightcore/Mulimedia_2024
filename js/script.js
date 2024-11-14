@@ -1,9 +1,4 @@
-const canvas = document.getElementById("olympicCanvas");
-const ctx = canvas.getContext("2d");
-
-// Culorile olimpice de bază
 const baseColors = ["blue", "black", "red", "yellow", "green"];
-
 const sports = [
   "Aquatics",
   "Archery",
@@ -42,71 +37,15 @@ const sports = [
   "Wrestling",
 ];
 
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight * 0.5;
-}
-resizeCanvas();
-
-function drawOlympicRings() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  const radius = Math.min(canvas.width, canvas.height) * 0.15;
-  const startX = canvas.width * 0.1;
-  const startY = canvas.height * 0.3;
-  const gap = radius * 2.5;
-
-  for (let i = 0; i < 5; i++) {
-    const x = startX + (i % 3) * gap + (i > 2 ? gap / 2 : 0);
-    const y = startY + (i > 2 ? radius * 1.5 : 0);
-    drawCircle(x, y, radius, baseColors[i]);
+function hexagonPoints(x, y, size) {
+  let points = [];
+  for (let i = 0; i < 6; i++) {
+    const angle = (Math.PI / 3) * i;
+    const px = x + size * Math.cos(angle);
+    const py = y + size * Math.sin(angle);
+    points.push(`${px},${py}`);
   }
-}
-
-function drawCircle(x, y, radius, color) {
-  ctx.beginPath();
-  ctx.arc(x, y, radius, 0, Math.PI * 2);
-  ctx.lineWidth = radius * 0.1;
-  ctx.strokeStyle = color;
-  ctx.stroke();
-  ctx.closePath();
-}
-
-function drawCustomOlympicRings(numCircles) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  const radius = Math.min(canvas.width, canvas.height) * 0.08;
-  const gap = radius * 2.5;
-  const maxCirclesInRow = numCircles / 2;
-
-  for (let i = 0; i < numCircles; i++) {
-    const color = i < baseColors.length ? baseColors[i] : getRandomColor();
-
-    const row = Math.floor(i / maxCirclesInRow);
-    const x = canvas.width * 0.1 + (i % maxCirclesInRow) * gap;
-    const y = canvas.height * 0.1 + row * (radius * 2.5);
-
-    drawCircle(x, y, radius, color);
-  }
-  displaySports(numCircles);
-}
-
-function displaySports(numCircles) {
-  const chosenSports = [];
-  while (chosenSports.length < numCircles) {
-    const randomSport = sports[Math.floor(Math.random() * sports.length)];
-    if (!chosenSports.includes(randomSport)) {
-      chosenSports.push(randomSport);
-    }
-  }
-
-  ctx.font = "18px Poppins";
-  ctx.fillStyle = "#f1e6fd";
-
-  let y = 300;
-  chosenSports.forEach((sport, index) => {
-    const x = 100 + (index % 5) * 200;
-    ctx.fillText(sport, x, y);
-    if ((index + 1) % 5 === 0) y += 20;
-  });
+  return points.join(" ");
 }
 
 function getRandomColor() {
@@ -118,17 +57,54 @@ function getRandomColor() {
   return color;
 }
 
-drawOlympicRings();
+function drawHexagons(num) {
+  const svg = document.getElementById("olympicHexagons");
+  svg.innerHTML = "";
+  const hexSize = 40;
+  const xOffset = 100;
+  const yOffset = 100;
+  const rowHeight = hexSize * 2.5;
+  const colSpacing = hexSize * 2.5;
+
+  for (let i = 0; i < num; i++) {
+    const row = i < Math.ceil(num / 2) ? 0 : 1;
+    const col = i % Math.ceil(num / 2);
+
+    const x = xOffset + col * colSpacing + (row === 1 ? colSpacing / 2 : 0);
+    const y = yOffset + row * rowHeight;
+
+    const color = i < 5 ? baseColors[i] : getRandomColor();
+    const sportName = sports[Math.floor(Math.random() * sports.length)];
+
+    const hex = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "polygon"
+    );
+    hex.setAttribute("points", hexagonPoints(x, y, hexSize));
+    hex.setAttribute("stroke", color);
+    hex.setAttribute("fill", "none");
+    hex.setAttribute("stroke-width", "3");
+    svg.appendChild(hex);
+
+    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("x", x);
+    text.setAttribute("y", y + hexSize / 2 + 10);
+    text.setAttribute("class", "text");
+    text.textContent = sportName;
+    svg.appendChild(text);
+  }
+}
+
+window.addEventListener("load", () => drawHexagons(5));
 
 document
-  .getElementById("circleForm")
+  .getElementById("hexagonForm")
   .addEventListener("submit", function (event) {
     event.preventDefault();
-    let numCircles = parseInt(document.getElementById("numCircles").value);
-    if (numCircles % 2 !== 1 || numCircles < 5 || numCircles > 35) {
-      alert("Numărul trebuie să fie impar și între 5 și 35.");
-      return;
+    const numHex = parseInt(document.getElementById("numHex").value);
+    if (numHex % 2 === 1 && numHex >= 5 && numHex <= 35) {
+      drawHexagons(numHex);
+    } else {
+      alert("Vă rugăm să alegeți un număr impar între 5 și 35.");
     }
-
-    drawCustomOlympicRings(numCircles);
   });

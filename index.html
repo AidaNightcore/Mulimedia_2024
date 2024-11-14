@@ -3,27 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Hexagoane Olimpice</title>
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
     <h1>Cercurile Olimpice</h1>
-    <canvas id="olympicCanvas"></canvas>
+    <svg
+      id="olympicHexagons"
+      width="100vw"
+      height="500"
+      viewBox="0 0 100vw 100"
+    ></svg>
 
-    <form id="circleForm">
-      <label for="numCircles"
-        >Introduceți un număr impar de cercuri olimpice (5-35):</label
+    <form id="hexagonForm">
+      <label for="numHexagons"
+        >Introduceți un număr impar de hexagoane olimpice (5-35):</label
       >
       <input
         type="number"
-        id="numCircles"
-        name="numCircles"
+        id="numHex"
+        name="numHexagons"
         min="5"
         max="35"
         step="2"
         required
       />
-      <button type="submit">Desenează</button>
+      <button type="submit" class="submit-btn">Desenează</button>
     </form>
   </body>
   <script src="./js/script.js"></script>

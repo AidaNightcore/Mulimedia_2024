@@ -12,7 +12,7 @@ input {
   font-size: 1rem;
 }
 
-button {
+.submit-btn {
   border: none;
   border-radius: 0.2rem;
   padding: 1rem 2rem;
@@ -20,8 +20,44 @@ button {
   background-color: #7965af;
 }
 
-button:hover {
+.submit-btn:hover {
   background-color: #5b3894;
   transition: 0.1s ease-in-out;
   cursor: pointer;
+}
+
+.hexagon {
+  fill: none;
+  stroke-width: 5;
+}
+.blue {
+  stroke: #1e90ff;
+  fill: none;
+}
+.yellow {
+  stroke: #ffd700;
+  fill: none;
+}
+.black {
+  stroke: #000000;
+  fill: none;
+}
+.green {
+  stroke: #32cd32;
+  fill: none;
+}
+.red {
+  stroke: #ff4500;
+  fill: none;
+}
+.text {
+  font-size: 10px;
+  text-anchor: middle;
+  fill: black;
+}
+.text {
+  font-size: 12px;
+  color: #f1e6fd;
+  text-anchor: middle;
+  fill: #f1e6fd;
 }
